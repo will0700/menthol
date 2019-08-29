@@ -13,6 +13,9 @@ pass
 
 def add_account(request): #get
     form = request.POST
+    owner = User.objects.get(id = request.session['user_id'])
+    new_account = Account.objects.create(name = form['name'], acc_balance = form['initial_balance'], category = form['category'], owner = owner)
+    return redirect("/dashboard")
 pass
 
 def add_account_processing(request): #post - (ex. add a new credit card)
