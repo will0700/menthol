@@ -11,7 +11,7 @@ def dashboard(request): #please proofread and replace this comment with "#comple
     if "user_id" not in request.session:
         return redirect('/')
     else:
-        context {
+        context = {
             "user": User.objects.get(id=request.session["user_id"]),
             "all_accounts": Account.objects.all(),
             "all_expenses": Expense.objects.all(),
@@ -113,9 +113,9 @@ def new_payment_processing(request): #please proofread and replace this comment 
         expense.exp_balance = (expense.exp_balance + request.POST["payment_amount"]) #expense account is only ever debited -Will
         expense.objects.save()
         ### apply credit to account ###
-        if account.category = "checking" or account.category = "saving":
+        if account.category == "checking" or account.category == "saving":
             account.acc_balance = (account.acc_balance - request.POST["payment_amount"]) #crediting a bank account decrease balance -Will
-        elif account.category = "credit_card":
+        elif account.category == "credit_card":
             account.acc_balance = (account.acc_balance + request.POST["payment_amount"]) #crediting a credit card increase balance -Will
         # elif account.category = "venmo":
         #     if account.acc_balance > request.POST["payment_amount"]:
