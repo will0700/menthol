@@ -5,105 +5,121 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'menthol_app/dashboard.css' %}">
     <title>Menthol - Dashboard</title>
 </head>
 <body>
-    <div id="container">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">
-                    <img src="http://reliefor.com/wp-content/uploads/2015/10/icon-menthol-300px.png" width="30" height="30" class="d-inline-block align-top" alt="">
-                Menthol</a>                  
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Home</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Navigation
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Accounts and Budgets</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Payments and Transfers</a>
-                        </div>
-                    </li>
-                        </ul>
-                        <div class="form-inline my-2 my-lg-0">
-                            <a class="nav-link disabled" href="#">Logged in as Justin</a>
-                            <a class="nav-link" href="#">Logout</a>
-                        </div>
-            </div>
-        </nav>
-        <div id="navigation">
-            <h2>Good Morning! Welcome to Menthol, definitely not a Mint knockoff.</h2>
-            <a href="/logout">Logout</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">
+                <img src="http://reliefor.com/wp-content/uploads/2015/10/icon-menthol-300px.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            Menthol</a>                  
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Navigation
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Accounts and Budgets</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Payments and Transfers</a>
+                    </div>
+                </li>
+                    </ul>
+                    <div class="form-inline my-2 my-lg-0">
+                        <a class="nav-link disabled" href="#">Logged in as Justin</a>
+                        <a class="nav-link" href="#">Logout</a>
+                    </div>
         </div>
-        <div id="accounts_wrapper">
-            <h2>Accounts overview</h2>
-            <table>
-                <thead>
+    </nav>
+    <div id="container">
+            <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Your Accounts</h5>
+                <table class="table">
+                <thead class="thead-dark">
                     <tr>
-                        <th>Account Name</th>
-                        <th>Account Category</th>
-                        <th>Account Balance</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Balance</th>
+                        <th scope="col">Type</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
-                {% for account in all_accounts %} <!-- Currently all... we only want 3 or 4? Highest Balance? CC due soon? Newest/Oldest? -Will -->
                     <tr>
-                        <td>{{ account.name }}</td>
-                        <td>{{ account.category }}</td>
-                        <td>{{ account.acc_balance }}</td>
+                        <td>Chase</td>
+                        <td>$12.34</td>
+                        <td>savings</td>
+                        <td><a href="#">View/Edit</a></td>
                     </tr>
-                {% endfor %}
                     <tr>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
+                        <td>Bank of America</td>
+                        <td>$100,000</td>
+                        <td>savings</td>
+                        <td><a href="#">View/Edit</a></td>
+                    </tr>
+                    <tr>
+                        <td>Capital One</td>
+                        <td>$3.50</td>
+                        <td>credit</td>
+                        <td><a href="#">View/Edit</a></td>
                     </tr>
                 </tbody>
-            </table>
-            <a href="/accounts">See all accounts</a>
+                </table>
+                <div style="margin-left: 5%;">
+                    <a href="#" class="btn btn-primary">View All</a>
+                    <a href="#" class="btn btn-primary">Add Account</a>
+                </div>                    
+            </div>
         </div>
-        <div id="expenses_wrapper">
-            <h2>Expenses overview</h2>
-            <table>
-                <thead>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Your Recent Transactions</h5>
+                <table class="table">
+                <thead class="thead-dark">
                     <tr>
-                        <th>Expense Name</th>
-                        <th>Expense Budget</th> <!--@Justin: what columns do we want in this table? UX wise -Will-->
-                        <th>Expense Balance</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Category</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for expense in all_expenses %} <!-- Currently all.. we only want 3 or 4? Closest to budget? Newest/Oldest? -Will -->
-                        <tr>
-                            <td>{{ expense.name }}</td>
-                            <td>{{ expense.budget }}</td>
-                            <td>{{ expense.acc_balance }}</td>
-                        </tr>
-                    {% endfor %}
-                        <tr>
-                            <td>...</td>
-                            <td>...</td>
-                            <td>...</td>
-                            <td>...</td>
-                        </tr>
-                    </tbody>
-            </table>
-            <a href="/expenses">See all expenses</a>
+                    <tr>
+                        <td>Amazon</td>
+                        <td>$132.34</td>
+                        <td>Gaming and Entertainment</td>
+                        <td><a href="#">View/Edit</a></td>
+                    </tr>
+                    <tr>
+                        <td>Taco Bell</td>
+                        <td>$8.50</td>
+                        <td>Fast Food</td>
+                        <td><a href="#">View/Edit</a></td>
+                    </tr>
+                    <tr>
+                        <td>Happy Spa</td>
+                        <td>$100</td>
+                        <td>Massage</td>
+                        <td><a href="#">View/Edit</a></td>
+                    </tr>
+                </tbody>
+                </table>
+                <div style="margin-left: 5%;">
+                    <a href="#" class="btn btn-primary">View All</a>
+                    <a href="#" class="btn btn-primary">Add Transaction</a>
+                </div>                    
+            </div>
         </div>
-        <div id="payments_wrapper"> <!--Needs Work-->
-            <h2>Recent payments</h2>
-            <!--Table goes here-->
-            <a href="/payments">See all payments</a>
+        <div style="display:flex; justify-content:space-evenly;">
+            <a href="#">Contact Us</a>
         </div>
-        <div id="transfers_wrapper"> <!--Needs Work-->
-            <h2>Recent transfers</h2>
-            <!--Table goes here-->
-            <a href="/transfers">See all transfers</a>
+        <div style="display:flex; justify-content:center;">
+            <p>Copyright 2019 Curly Boiz inc.</p>
         </div>
     </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
