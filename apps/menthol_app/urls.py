@@ -2,6 +2,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
+    url(r'^dashboard$', views.dashboard),
     url(r'^expenses$', views.all_expense),
     url(r'^expenses/new$', views.add_expense),
     url(r'^expenses/processing$', views.add_expense_processing),
