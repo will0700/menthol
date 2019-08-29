@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Menthol - Dashboard</title>
+</head>
+<body>
+    <div id="container">
+        <div id="navigation">
+            <h2>Good Morning! Welcome to Menthol, definitely not a Mint knockoff.</h2>
+            <a href="/logout">Logout</a>
+        </div>
+        <div id="accounts_wrapper">
+            <h2>Accounts overview</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Account Name</th>
+                        <th>Account Category</th>
+                        <th>Account Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for account in all_accounts %} <!-- Currently all... we only want 3 or 4? Highest Balance? CC due soon? Newest/Oldest? -Will -->
+                    <tr>
+                        <td>{{ account.name }}</td>
+                        <td>{{ account.category }}</td>
+                        <td>{{ account.acc_balance }}</td>
+                    </tr>
+                {% endfor %}
+                    <tr>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                </tbody>
+            </table>
+            <a href="/accounts">See all accounts</a>
+        </div>
+        <div id="expenses_wrapper">
+            <h2>Expenses overview</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Expense Name</th>
+                        <th>Expense Budget</th> <!--@Justin: what columns do we want in this table? UX wise -Will-->
+                        <th>Expense Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expense in all_expenses %} <!-- Currently all.. we only want 3 or 4? Closest to budget? Newest/Oldest? -Will -->
+                        <tr>
+                            <td>{{ expense.name }}</td>
+                            <td>{{ expense.budget }}</td>
+                            <td>{{ expense.acc_balance }}</td>
+                        </tr>
+                    {% endfor %}
+                        <tr>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                        </tr>
+                    </tbody>
+            </table>
+            <a href="/expenses">See all expenses</a>
+        </div>
+        <div id="payments_wrapper"> <!--Needs Work-->
+            <h2>Recent payments</h2>
+            <!--Table goes here-->
+            <a href="/payments">See all payments</a>
+        </div>
+        <div id="transfers_wrapper"> <!--Needs Work-->
+            <h2>Recent transfers</h2>
+            <!--Table goes here-->
+            <a href="/transfers">See all transfers</a>
+        </div>
+    </div>
+</body>
+</html>
