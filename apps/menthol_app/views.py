@@ -50,6 +50,6 @@ def all_payment(request): #get
 def new_payment(request): #get
     pass
 
-def new_payment_posting(request): #post - (new transaction between expense and account, ex. buy Gas with Credit Card)
+def new_payment_processing(request): #post - (new transaction between expense and account, ex. buy Gas with Credit Card)
     pass
 #add view, edit, and remove later :v
