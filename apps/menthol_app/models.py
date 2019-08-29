@@ -20,7 +20,7 @@ class Expense(models.Model):
 class Payment(models.Model):
     vendor = models.CharField(max_length=45) #ex. Taco Bell, Nordstrom, etc
     description = models.CharField(max_length=45) #ex. New red flannel, lunch with Eduardo, etc
-    payment_amount = models.DecimalField(decimal_places=2, max_digits=12)
+    amount = models.DecimalField(decimal_places=2, max_digits=12)
     debit_exp = models.ForeignKey(Expense, related_name="payments_debit")
     credit_acc = models.ForeignKey(Account, related_name="payments_credit")
     owner = models.ForeignKey(User, related_name="payments")
@@ -30,7 +30,7 @@ class Payment(models.Model):
 class Transfer(models.Model):
     vendor = models.CharField(max_length=45) #ex. Taco Bell, Nordstrom, Chase Bank, etc
     description = models.CharField(max_length=45) #ex. Pay Chase Card off with BoA Checking, Buy Gas at Arco with Debit Card, etc
-    transfer_amount = models.DecimalField(decimal_places=2, max_digits=12)
+    amount = models.DecimalField(decimal_places=2, max_digits=12)
     debit_acc = models.ForeignKey(Account, related_name="transfers_debit")
     credit_acc = models.ForeignKey(Account, related_name="transfers_credit")
     owner = models.ForeignKey(User, related_name="transfers")

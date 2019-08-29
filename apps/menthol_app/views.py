@@ -12,16 +12,18 @@ def dashboard(request): #in progress
         return redirect("/")
     else:
         user = User.objects.get(id=request.session["user_id"])
+        all_payments = Payment.objects.filter(owner=user).values_list("date", "vendor", "description", "amount")
+        all_transfers = Transfer.objects.filter(owner=user).values_list("date", "vendor", "description", "amount")
+        all_transactions = all_payments.union(all_transfers)
         context = {
             "user": user,
             "all_accounts": Account.objects.filter(owner=user),
             "all_expenses": Expense.objects.filter(owner=user),
             "all_payments": Payment.objects.filter(owner=user),
             "all_transfers": Transfer.objects.filter(owner=user),
+            "all_transactions": all_transactions,
         }
         return render(request, "menthol_app/dashboard.html", context)
-
-
 
 ################
 ### ACCOUNTS ###
@@ -53,7 +55,7 @@ def add_account_processing(request): #complete, not tested
         return redirect("/accounts/new")
     form = request.POST
     user = User.objects.get(id = request.session["user_id"])
-    new_account = Account.objects.create(name=form["name"], acc_balance=form["initial_balance"], category=form["category"], owner=user)
+    new_account = Account.objects.create(name=form["name"], acc_balance=0, category=form["category"], owner=user)
     return redirect("/accounts")
 
 def view_account(request, acc_id): #complete, not tested
@@ -146,7 +148,7 @@ def add_expense_processing(request): #complete, not tested
         return redirect("/accounts/new")
     form = request.POST
     user = User.objects.get(id = request.session["user_id"])
-    new_account = Account.objects.create(name=form["name"], acc_balance=form["initial_balance"], category=form["category"], owner=user)
+    new_expense = Expense.objects.create(name=form["name"], exp_balance=0, budget=form["budget"], , owner=user)
     return redirect("/expenses")
 
 def view_expense(request, exp_id): #complete, not tested
@@ -235,18 +237,18 @@ def new_payment_processing(request): #complete, not tested
         account = Account.objects.get(name=request.POST["account"]) # / 
         user = User.objects.get(id=request.session["user_id"])
         ### create new payment object ###
-        new_payment = Payment.objects.create(vendor=request.POST["vendor"], description=request.POST["description"], payment_amount=request.POST["payment_amount"], debit_exp=expense, credit_acc=account, owner=user)
+        new_payment = Payment.objects.create(vendor=request.POST["vendor"], description=request.POST["description"], amount=request.POST["amount"], debit_exp=expense, credit_acc=account, owner=user)
         ### apply debit to expense ###
-        expense.exp_balance = (expense.exp_balance + request.POST["payment_amount"]) #expense account is only ever debited -Will
+        expense.exp_balance = (expense.exp_balance + request.POST["amount"]) #expense account is only ever debited -Will
         expense.objects.save()
         ### apply credit to account ###
         if account.category == "checking" or account.category == "saving":
-            account.acc_balance = (account.acc_balance - request.POST["payment_amount"]) #crediting a bank account decrease balance -Will
+            account.acc_balance = (account.acc_balance - request.POST["amount"]) #crediting a bank account decrease balance -Will
         elif account.category == "credit_card":
-            account.acc_balance = (account.acc_balance + request.POST["payment_amount"]) #crediting a credit card increase balance -Will
+            account.acc_balance = (account.acc_balance + request.POST["amount"]) #crediting a credit card increase balance -Will
         # elif account.category = "venmo":
-        #     if account.acc_balance > request.POST["payment_amount"]:
-        #         account.acc_balance = account.acc_balance - request.POST["payment_amount"]
+        #     if account.acc_balance > request.POST["amount"]:
+        #         account.acc_balance = account.acc_balance - request.POST["amount"]
         #     else:
                 ## venmo is tricky, because how do we know which bank account should be credited if venmo balance is insufficient?
                 ## we can"t store it in our Account model... do we need a new Model object table for Venmo alone...?
@@ -292,7 +294,7 @@ def new_transfer(request): #complete***, not tested
         }
         return render(request, "menthol_app/new_transfer.html", context) #***dashboard or new template?
 
-def new_transfer_processing(request): #complete, not tested
+def new_processing(request): #complete, not tested
     if request.method != "POST":
         return redirect("/transfers/new")
     else:
@@ -301,12 +303,12 @@ def new_transfer_processing(request): #complete, not tested
         acc_to_credit = Account.objects.get(name=request.POST["credit_acc"]) # / Lowkey really tricky though, lets please discuss
         owner = User.objects.get(id=request.session["user_id"])
         ### create new transfer object ###
-        new_transfer = Transfer.objects.create(vendor=request.POST["vendor"], description=request.POST["description"], transfer_amount=request.POST["transfer_amount"], debit_acc=acc_to_debit, credit_acc=acc_to_credit)
+        new_transfer = Transfer.objects.create(vendor=request.POST["vendor"], description=request.POST["description"], amount=request.POST["amount"], debit_acc=acc_to_debit, credit_acc=acc_to_credit)
         ### apply debit to debit acc ###
-        acc_to_debit.acc_balance = (acc_to_debit.acc_balance + request.POST["transfer_amount"])
+        acc_to_debit.acc_balance = (acc_to_debit.acc_balance + request.POST["amount"])
         acc_to_debit.objects.save()
         ### apply credit to credit acc ###
-        acc_to_credit.acc_balance = (acc_to_credit.acc_balance - request.POST["transfer_amount"])
+        acc_to_credit.acc_balance = (acc_to_credit.acc_balance - request.POST["amount"])
         acc_to_credit.objects.save()
         return redirect("/transfers")
         # "/transfers" or "/transfers/new"? chances are bookkeeping is weekly at best and has like 15 entries to make... UX decision. -Will
