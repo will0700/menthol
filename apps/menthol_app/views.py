@@ -12,16 +12,16 @@ def dashboard(request): #in progress
         return redirect("/")
     else:
         user = User.objects.get(id=request.session["user_id"])
-        all_payments = Payment.objects.filter(owner=user).values_list("date", "vendor", "description", "amount")
-        all_transfers = Transfer.objects.filter(owner=user).values_list("date", "vendor", "description", "amount")
-        all_transactions = all_payments.union(all_transfers)
+        all_payments = Payment.objects.filter(owner=user).values_list("created_at", "vendor", "description", "amount")
+        all_transfers = Transfer.objects.filter(owner=user).values_list("created_at", "vendor", "description", "amount")
+        # all_transactions = all_payments.union(all_transfers)
         context = {
             "user": user,
-            "all_accounts": Account.objects.filter(owner=user),
+            "all_accounts": Account.objects.filter(owner=user)[:4],
             "all_expenses": Expense.objects.filter(owner=user),
             "all_payments": Payment.objects.filter(owner=user),
             "all_transfers": Transfer.objects.filter(owner=user),
-            "all_transactions": all_transactions,
+            # "all_transactions": all_transactions,
         }
         return render(request, "menthol_app/dashboard.html", context)
 
@@ -83,7 +83,7 @@ def edit_account(request, acc_id): #complete, not tested
             return redirect("/accounts")
         else:
             context = {
-                "user": user
+                "user": user,
                 "acc_to_edit": acc_to_edit
             }
             return render(request, "menthol_app/edit_account.html", context)
@@ -148,7 +148,7 @@ def add_expense_processing(request): #complete, not tested
         return redirect("/accounts/new")
     form = request.POST
     user = User.objects.get(id = request.session["user_id"])
-    new_expense = Expense.objects.create(name=form["name"], exp_balance=0, budget=form["budget"], , owner=user)
+    new_expense = Expense.objects.create(name=form["name"], exp_balance=0, budget=form["budget"], owner=user)
     return redirect("/expenses")
 
 def view_expense(request, exp_id): #complete, not tested
@@ -176,7 +176,7 @@ def edit_expense(request, exp_id): #complete, not tested
             return redirect("/expenses")
         else:
             context = {
-                "user": user
+                "user": user,
                 "exp_to_edit": exp_to_edit
             }
             return render(request, "menthol_app/edit_expense.html", context)
@@ -294,7 +294,7 @@ def new_transfer(request): #complete***, not tested
         }
         return render(request, "menthol_app/new_transfer.html", context) #***dashboard or new template?
 
-def new_processing(request): #complete, not tested
+def new_transfer_processing(request): #complete, not tested
     if request.method != "POST":
         return redirect("/transfers/new")
     else:
