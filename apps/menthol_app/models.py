@@ -22,7 +22,7 @@ class Payment(models.Model):
     description = models.CharField(max_length=45) #ex. New red flannel, lunch with Eduardo, etc
     payment_amount = models.DecimalField(decimal_places=2)
     debit_exp = models.ForeignKey(Expense, related_name="payments_debit")
-    credit_acc = models.ForeignKey(Account, related=name="payments_credit")
+    credit_acc = models.ForeignKey(Account, related_name="payments_credit")
     owner = models.ForeignKey(User, related_name="expenses")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
