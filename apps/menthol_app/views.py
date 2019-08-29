@@ -7,79 +7,195 @@ from .models import *
 #################
 ### DASHBOARD ###
 #################
-def dashboard(request): #please proofread and replace this comment with "#complete" -Will
+def dashboard(request): #in progress
     if "user_id" not in request.session:
-        return redirect('/')
+        return redirect("/")
     else:
+        user = User.objects.get(id=request.session["user_id"])
         context = {
-            "user": User.objects.get(id=request.session["user_id"]),
-            "all_accounts": Account.objects.all(),
-            "all_expenses": Expense.objects.all(),
-            "all_payments": Payment.objects.all(),
-            "all_transfers": Transfer.objects.all(),
+            "user": user,
+            "all_accounts": Account.objects.filter(owner=user),
+            "all_expenses": Expense.objects.filter(owner=user),
+            "all_payments": Payment.objects.filter(owner=user),
+            "all_transfers": Transfer.objects.filter(owner=user),
         }
-        return render(request, 'menthol_app/dashboard.html', context)
+        return render(request, "menthol_app/dashboard.html", context)
 
 
 
 ################
 ### ACCOUNTS ###
 ################
-def all_account(request): #please proofread and replace this comment with "#complete" -Will
+def all_account(request): #complete, not tested
     if "user_id" not in request.session:
-        return redirect('/')
+        return redirect("/")
     else:
-        owner = User.objects.get(id=request.session["user_id"])
-        all_accounts = Account.object.filter(owner=owner)
+        user = User.objects.get(id=request.session["user_id"])
+        all_accounts = Account.objects.filter(owner=user)
         context = {
-            "user": owner,
+            "user": user,
             "all_accounts": all_accounts,
         }
-        return render(request, 'menthol_app/al_account.html', context)
+        return render(request, "menthol_app/all_account.html", context)
 
-def add_account(request): #please proofread and replace this comment with "#complete" -Will
+def add_account(request): #complete, not tested
     if "user_id" not in request.session:
-        return redirect('/')
+        return redirect("/")
     else:
+        user = User.objects.get(id=request.session["user_id"])
         context = {
-            "user": User.objects.get(id=request.session["user_id"]), #idk if needed, but safe -Will
+            "user": user,
         }
-        return render(request, '/menthol_app/dashboard.html', context)
+        return render(request, "/menthol_app/dashboard.html", context)
 
-def add_account_processing(request): #please proofread and replace this comment with "#complete" -Will
+def add_account_processing(request): #complete, not tested
     if request.method != "POST":
-        return redirect('/accounts/new')
+        return redirect("/accounts/new")
     form = request.POST
-    owner = User.objects.get(id = request.session['user_id'])
-    new_account = Account.objects.create(name = form['name'], acc_balance = form['initial_balance'], category = form['category'], owner = owner)
-    return redirect("/dashboard") # /dashboard or /accounts? You guys's UX decision. -Will
+    user = User.objects.get(id = request.session["user_id"])
+    new_account = Account.objects.create(name=form["name"], acc_balance=form["initial_balance"], category=form["category"], owner=user)
+    return redirect("/accounts")
 
-#To Do: View, Edit, Remove
-###
-### I know we didn't want multiple templates redirecting everywhere for UX reasons, but I think we at least need one template between View and Edit.
+def view_account(request, acc_id): #complete, not tested
+    if "user_id" not in request.session:
+        return redirect("/")
+    else:
+        user = User.objects.get(id=request.session["user_id"])
+        account = Account.objects.get(id=acc_id)
+        if account.owner != user:
+            return redirect("/accounts")
+        else:
+            context = {
+                "user": user,
+                "account": account,
+            }
+            return render(request, "menthol_app/view_account.html", context)
+
+def edit_account(request, acc_id): #complete, not tested
+    if "user_id" not in request.session:
+        return redirect ('/')
+    else:
+        user = User.objects.get(id=request.session["user_id"])
+        acc_to_edit = Account.objects.get(id=acc_id)
+        if acc_to_edit.owner != user:
+            return redirect("/accounts")
+        else:
+            context = {
+                "user": user
+                "acc_to_edit": acc_to_edit
+            }
+            return render(request, "menthol_app/edit_account.html", context)
+
+def edit_account_processing(request, acc_id): #complete, not tested
+    if request.method != "POST":
+        return redirect ("/edit_account")
+    else:
+        user = User.objects.get(id=request.session["user_id"])
+        acc_to_edit = Account.objects.get(id=acc_id)
+        acc_to_edit.name = request.POST["name"]
+        # acc_to_edit.balance = request.POST["balance"]
+        # should balance be allowed for manual edit...??? -Will
+        acc_to_edit.category = request.POST["category"]
+        acc_to_edit.save()
+        return redirect('/accounts')
+
+# def remove_account(request, acc_id): #complete, not tested ***DO NOT USE***
+#     if "user_id" not in request.session:
+#         return redirect('/')
+#     else:
+#         user = User.objects.get(id=request.session["user_id"])
+#         acc_to_remove = Account.objects.get(id=acc_id)
+#         if acc_to_remove.owner != user:
+#             return redirect("/accounts")
+#         else:
+#             acc_to_remove.objects.delete()
+#             return redirect("/accounts")
 ### Removing a bank account should not be allowed once it has been used, for both ForeignKey association reasons and Accounting reasons.
-### But should we want it, Remove can just be an anchor GET route that deletes the object and redirects to dashboard or '/accounts'.
+### Not sure how to test if ForeignKey relationship exists though... Should we completely disable?
 ### -Will
 
 
 
 ################
-### EXPENSES ### # Basically same as Accounts, I think -Will
+### EXPENSES ###
 ################
-def all_expense(request): #get
-    pass
+def all_expense(request): #complete, not tested
+    if "user_id" not in request.session:
+        return redirect("/")
+    else:
+        user = User.objects.get(id=request.session["user_id"])
+        all_expenses = Expense.objects.filter(owner=user)
+        context = {
+            "user": user,
+            "all_expenses": all_expenses,
+        }
+        return render(request, "menthol_app/all_expense.html", context)
 
-def add_expense(request): #get
-    pass
+def add_expense(request): #complete, not tested
+    if "user_id" not in request.session:
+        return redirect("/")
+    else:
+        user = User.objects.get(id=request.session["user_id"])
+        context = {
+            "user": user,
+        }
+        return render(request, "/menthol_app/dashboard.html", context)
 
-def add_expense_processing(request): #post - (ex. add a new budget category: Snowboarding)
-    pass
+def add_expense_processing(request): #complete, not tested
+    if request.method != "POST":
+        return redirect("/accounts/new")
+    form = request.POST
+    user = User.objects.get(id = request.session["user_id"])
+    new_account = Account.objects.create(name=form["name"], acc_balance=form["initial_balance"], category=form["category"], owner=user)
+    return redirect("/expenses")
 
-#To Do: View, Edit, Remove
-###
-### I know we didn't want multiple templates redirecting everywhere for UX reasons, but I think we at least need one template between View and Edit.
+def view_expense(request, exp_id): #complete, not tested
+    if "user_id" not in request.session:
+        return redirect("/")
+    else:
+        user = User.objects.get(id=request.session["user_id"])
+        expense = Expense.objects.get(id=acc_id)
+        if expense.owner != user:
+            return redirect("/expenses")
+        else:
+            context = {
+                "user": user,
+                "expense": expense,
+            }
+            return render(request, "menthol_app/view_expense.html", context)
+
+def edit_expense(request, exp_id): #complete, not tested
+    if "user_id" not in request.session:
+        return redirect ('/')
+    else:
+        user = User.objects.get(id=request.session["user_id"])
+        exp_to_edit = Expense.objects.get(id=exp_id)
+        if exp_to_edit.owner != user:
+            return redirect("/expenses")
+        else:
+            context = {
+                "user": user
+                "exp_to_edit": exp_to_edit
+            }
+            return render(request, "menthol_app/edit_expense.html", context)
+
+def edit_expense_processing(request, acc_id): #complete, not tested
+    if request.method != "POST":
+        return redirect ("/edit_expense")
+    else:
+        user = User.objects.get(id=request.session["user_id"])
+        exp_to_edit = Expense.objects.get(id=exp_id)
+        exp_to_edit.name = request.POST["name"]
+        # exp_to_edit.balance = request.POST["balance"]
+        # should balance be allowed for manual edit...??? -Will
+        exp_to_edit.category = request.POST["category"]
+        exp_to_edit.save()
+        return redirect('/expenses')
+
+def remove_expense(request, exp_id): #to do
+    pass
 ### Removing an expense account should not be allowed once it has been used, for both ForeignKey association reasons and Accounting reasons.
-### But should we want it, Remove can just be an anchor GET route that deletes the object and redirects to dashboard or '/expenses'.
+### But should we want it, Remove can just be an anchor GET route that deletes the object and redirects to dashboard or "/expenses".
 ### -Will
 
 
@@ -87,21 +203,32 @@ def add_expense_processing(request): #post - (ex. add a new budget category: Sno
 ###############
 ### PAYMENT ###
 ###############
-def all_payment(request): #get
+def all_payment(request): #complete, not tested
     if "user_id" not in request.session:
-        return redirect('/')
+        return redirect("/")
     else:
-        pass #real code block here
+        user = User.objects.get(id=request.session["user_id"])
+        all_payments = Payment.objects.filter(owner=user)
+        context = {
+            "user": user,
+            "all_payments": all_payments,
+        }
+        return render(request, "menthol_app/all_payment.html", context)
 
-def new_payment(request): #get
+
+def new_payment(request): #complete***, not tested
     if "user_id" not in request.session:
-        return redirect('/')
+        return redirect("/")
     else:
-        pass #real code block here
+        user = User.objects.get(id=request.session["user_id"])
+        context = {
+            "user": user,
+        }
+        return render(request, "menthol_app/new_payment.html", context) #***dashboard or new template?
 
-def new_payment_processing(request): #please proofread and replace this comment with "#complete" -Will
+def new_payment_processing(request): #complete, not tested
     if request.method != "POST":
-        return redirect('payments/new')
+        return redirect("payments/new")
     else:
         ### retrieve objects ###
         expense = Expense.objects.get(name=request.POST["expense"]) # \ @Justin please match these <form><input name=""> in the html -Will
@@ -122,39 +249,52 @@ def new_payment_processing(request): #please proofread and replace this comment 
         #         account.acc_balance = account.acc_balance - request.POST["payment_amount"]
         #     else:
                 ## venmo is tricky, because how do we know which bank account should be credited if venmo balance is insufficient?
-                ## we can't store it in our Account model... do we need a new Model object table for Venmo alone...?
+                ## we can"t store it in our Account model... do we need a new Model object table for Venmo alone...?
                 ## then we would need to foreign key that new object into User and Payment and Transfer... highly inefficient.
                 ## tentatively suggesting we leave venmo tracking as a postgrad idea.
                 ## -Will
         account.objects.save()
-        return redirect('/payments') # '/payments' or '/payments/new'? chances are bookkeeping is weekly at best and has like 15 entries to make... UX decision. -Will
+        return redirect("/payments") # "/payments" or "/payments/new"? chances are bookkeeping is weekly at best and has like 15 entries to make... UX decision. -Will
 
-#To Do: View, Edit, Remove
-###
-### Same concern regarding View and Edit as above account/expense scenario.
-### Remove does not carry same concern as above. Is strictly necessary. @Joel Could you set up the URL.py and Views.py for remove?
-### -Will
+def view_payment(request, pmt_id): #to do
+    pass
+
+def edit_payment(request, pmt_id): #to do
+    pass
+
+def remove_payment(request, pmt_id): #to do
+    pass
 
 
 
 ################
 ### TRANSFER ###
 ################
-def all_transfer(request): #get
+def all_transfer(request): #complete, not tested
     if "user_id" not in request.session:
-        return redirect('/')
+        return redirect("/")
     else:
-        pass #real code block here
+        user = User.objects.get(id=request.session["user_id"])
+        all_transfers = Transfer.objects.filter(owner=user)
+        context = {
+            "user": user,
+            "all_transfers": all_transfers,
+        }
+        return render(request, "menthol_app/all_transfer.html", context)
 
-def new_transfer(request): #get
+def new_transfer(request): #complete***, not tested
     if "user_id" not in request.session:
-        return redirect('/')
+        return redirect("/")
     else:
-        pass #real code block here
+        user = User.objects.get(id=request.session["user_id"])
+        context = {
+            "user": user,
+        }
+        return render(request, "menthol_app/new_transfer.html", context) #***dashboard or new template?
 
-def new_transfer_processing(request): #please proofread and replace this comment with "#complete" -Will
+def new_transfer_processing(request): #complete, not tested
     if request.method != "POST":
-        return redirect('/transfers/new')
+        return redirect("/transfers/new")
     else:
         ### retrieve objects ###
         acc_to_debit = Account.objects.get(name=request.POST["debit_acc"])   # \ @Justin please match these <form><input name=""> in the html -Will
@@ -168,13 +308,17 @@ def new_transfer_processing(request): #please proofread and replace this comment
         ### apply credit to credit acc ###
         acc_to_credit.acc_balance = (acc_to_credit.acc_balance - request.POST["transfer_amount"])
         acc_to_credit.objects.save()
-        return redirect('/transfers') # '/transfers' or '/transfers/new'? chances are bookkeeping is weekly at best and has like 15 entries to make... UX decision. -Will
+        return redirect("/transfers")
+        # "/transfers" or "/transfers/new"? chances are bookkeeping is weekly at best and has like 15 entries to make... UX decision. -Will
 
-#To Do: View, Edit, Remove
-###
-### Same concern regarding View and Edit as above account/expense scenario.
-### Remove does not carry same concern as above. Is strictly necessary. @Joel Could you set up the URL.py and Views.py for remove?
-### -Will
+def view_transfer(request, xfer_id): #to do
+    pass
+
+def edit_transfer(request, xfer_id): #to do
+    pass
+
+def remove_transfer(request, xfer_id): #to do
+    pass
 
 
 
