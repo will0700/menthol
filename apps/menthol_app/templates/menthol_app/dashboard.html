@@ -31,7 +31,7 @@
                 </li>
                     </ul>
                     <div class="form-inline my-2 my-lg-0">
-                        <a class="nav-link disabled" href="#">Logged in as Justin</a>
+                        <a class="nav-link disabled" href="#">Logged in as {{user.first_name}} {{user.last_name}}</a>
                         <a class="nav-link" href="#">Logout</a>
                     </div>
         </div>
@@ -50,12 +50,14 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for account in all_accounts %}
                     <tr>
-                        <td>Chase</td>
-                        <td>$12.34</td>
-                        <td>savings</td>
+                        <td>account.name</td>
+                        <td>account.acc_balance</td>
+                        <td>account.category</td>
                         <td><a href="#">View/Edit</a></td>
                     </tr>
+                    {% endfor %}
                     <tr>
                         <td>Bank of America</td>
                         <td>$100,000</td>
