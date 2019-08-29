@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Menthol - Login & Reg</title>
+</head>
+<body>
+    <div id="register">
+        {% for message in messages %}
+            <p style="color: red;">{{ message }}</p>
+        {% endfor %}
+        <h1>Register!</h1>
+        <form action='/register' method='POST'>
+            {% csrf_token %}
+            First Name: <input type='text' name='first_name'>
+            Last Name: <input type='text' name='last_name'>
+            Email: <input type='text' name='email'>
+            Password: <input type='text' name='password'>
+            Confirm PW: <input type='text' name='password_c'>
+            <button type='Submit'>Register</button>
+        </form>
+    </div>
+    <div id="login">
+        <h1>Log In!</h1>
+        <form action='/login' method='POST'>
+            {% csrf_token %}
+            Email: <input type='text' name='email'>
+            Password: <input type='text' name='password'>
+            <button type='Submit' value='Submit'>Log In</button>
+        </form>
+    </div>
+</body>
+</html>
