@@ -17,7 +17,7 @@ def dashboard(request): #in progress
         # all_transactions = all_payments.union(all_transfers)
         context = {
             "user": user,
-            "all_accounts": Account.objects.filter(owner=user)[:4],
+            "all_accounts": Account.objects.filter(owner=user),
             "all_expenses": Expense.objects.filter(owner=user),
             "all_payments": Payment.objects.filter(owner=user),
             "all_transfers": Transfer.objects.filter(owner=user),
