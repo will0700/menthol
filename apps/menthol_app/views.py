@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from apps.login_reg.models import *
 from .models import *
 # Create your views here.
-
+#testing git branches
 def dashboard(request): #get
 #overview of spending/budget, shows add account/expense anchors/buttons, shows new transfer/payments anchors/buttons
 pass
