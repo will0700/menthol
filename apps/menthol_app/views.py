@@ -12,6 +12,7 @@ def all_account(request): #get
 pass
 
 def add_account(request): #get
+    form = request.POST
 pass
 
 def add_account_processing(request): #post - (ex. add a new credit card)
