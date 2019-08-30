@@ -45,6 +45,7 @@
                                     <th scope="col">Name</th>
                                     <th scope="col">Category</th>
                                     <th scope="col">Balance</th>
+                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -52,6 +53,10 @@
                                 <tr>{{ account.name }}</tr>
                                 <tr>{{ account.category }}</tr>
                                 <tr>{{ account.acc_balance }}</tr>
+                                <tr>
+                                    <a href="/accounts/view/{{account.id}}"> View </a>
+                                    | <a href="/accounts/edit/{{account.id}}"> Edit </a>
+                                </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
