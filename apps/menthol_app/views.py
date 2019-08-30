@@ -12,16 +12,24 @@ def dashboard(request): #in progress
         return redirect("/")
     else:
         user = User.objects.get(id=request.session["user_id"])
-        all_payments = Payment.objects.filter(owner=user).values_list("created_at", "vendor", "description", "amount")
-        all_transfers = Transfer.objects.filter(owner=user).values_list("created_at", "vendor", "description", "amount")
+        # all_payments = Payment.objects.filter(owner=user).values_list("created_at", "vendor", "description", "amount")
+        # all_transfers = Transfer.objects.filter(owner=user).values_list("created_at", "vendor", "description", "amount")
         # all_transactions = all_payments.union(all_transfers)
+        all_accounts = Account.objects.filter(owner=user)
+        all_expenses = Expense.objects.filter(owner=user)
+        all_payments = Payment.objects.filter(owner=user)
+        all_transfers = Transfer.objects.filter(owner=user)
+        all_percentages = {}
+        for expense in all_expenses:
+            all_percentages[expense.id] = expense.exp_balace/expense.budget
         context = {
             "user": user,
-            "all_accounts": Account.objects.filter(owner=user),
-            "all_expenses": Expense.objects.filter(owner=user),
-            "all_payments": Payment.objects.filter(owner=user),
-            "all_transfers": Transfer.objects.filter(owner=user),
+            "all_accounts": all_accounts,
+            "all_expenses": all_expenses,
+            "all_payments": all_payments,
+            "all_transfers": all_transfers,
             # "all_transactions": all_transactions,
+            "all_percentages": all_percentages,
         }
         return render(request, "menthol_app/dashboard.html", context)
 
@@ -34,9 +42,15 @@ def all_account(request): #complete, not tested
     else:
         user = User.objects.get(id=request.session["user_id"])
         all_accounts = Account.objects.filter(owner=user)
+        all_expenses = Expense.objects.filter(owner=user)
+        all_percentages = {}
+        for expense in all_expenses:
+            all_percentages[expense.id] = expense.exp_balace/expense.budget
         context = {
             "user": user,
             "all_accounts": all_accounts,
+            "all_expenses": all_expenses,
+            "all_percentages": all_percentages,
         }
         return render(request, "menthol_app/all_account.html", context)
 
@@ -211,9 +225,11 @@ def all_payment(request): #complete, not tested
     else:
         user = User.objects.get(id=request.session["user_id"])
         all_payments = Payment.objects.filter(owner=user)
+        all_transfers = Transfer.objects.filter(owner=user)
         context = {
             "user": user,
             "all_payments": all_payments,
+            "all_transfers": all_transfers,
         }
         return render(request, "menthol_app/all_transfer.html", context)
 
