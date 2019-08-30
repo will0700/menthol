@@ -26,7 +26,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="/accounts">Accounts and Budgets</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/payments">Payments and s</a>
+                            <a class="dropdown-item" href="/payments">Payments and Transfers</a>
                         </div>
                     </li>
                         </ul>
@@ -42,37 +42,37 @@
             <div class="card test">
                 <div class="card-body">
                     <h5 style="margin-bottom:5%">Add Transfer</h5>
-                        <form>
+                        <form method="post" action="/transfers/processing">
                             <div class="row">
                                 <div class="col">
                                     <label for="From">From:</label>
-                                    <select id="From" name="category">
+                                    <select id="From" name="credit_acc">
                                         <option>Select Account</option>
-                                        <option value="checking">Checking</option>
-                                        <option value="saving">Saving</option>
-                                        <option value="credit_card">Credit Card</option>
+                                        {% for account in all_accounts %}
+                                        <option value="{{account.name}}">{{account.name}}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                                 <div class="col">
                                     <label for="From">To:</label>
-                                    <select name="category">                                        
+                                    <select name="debit_acc">     
                                         <option>Select Account</option>
-                                        <option value="checking">Checking</option>
-                                        <option value="saving">Saving</option>
-                                        <option value="credit_card">Credit Card</option>
+                                        {% for account in all_accounts %}
+                                        <option value="{{account.name}}">{{account.name}}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                                 <div class="row">
                                     <div style="margin:7%" class="col">                                        
                                         <label for="description">Description:</label>
-                                        <input class="form-control" id="description" type="text" name="name">
+                                        <input class="form-control" id="description" type="text" name="description">
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div style="margin-top:5%" class="col">
                                     <label for="amount">Amount:</label>
-                                    <input type="number" id ="amount" placeholder="1.0" step="0.01">
+                                    <input type="number" id ="amount" placeholder="1.0" step="0.01" name="amount">
                                     <button style="margin-left:10%;" class="btn btn-primary">Submit</button>
                                 </div>
                             </div>
@@ -106,41 +106,41 @@
             <div class="card test">
                     <div class="card-body">
                         <h5>Add Payment</h5>
-                            <form>
+                            <form method="post" action="/payments/processing">
                                 <div class="row">
                                     <div class="col">
                                         <label for="From">Payment Account:</label>
-                                        <select id="From" name="category">
+                                        <select id="From" name="account">
                                             <option>Select Account</option>
-                                            <option value="checking">Checking</option>
-                                            <option value="saving">Saving</option>
-                                            <option value="credit_card">Credit Card</option>
+                                            {% for account in all_accounts %}
+                                            <option value="{{account.name}}">{{account.name}}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                     <div class="col">
                                         <label for="From">Budget Category:</label>
-                                        <select name="category">                                        
-                                            <option>Select Account</option>
-                                            <option value="checking">Checking</option>
-                                            <option value="saving">Saving</option>
-                                            <option value="credit_card">Credit Card</option>
+                                        <select name="expense">                                        
+                                                <option>Select Budget</option>
+                                                {% for expense in all_expenses %}
+                                                <option value="{{expense.name}}">{{expense.name}}</option>
+                                                {% endfor %}
                                         </select>
                                     </div>
                                     <div class="row">
                                         <div style="margin:3%" class="col">                                        
                                             <label for="vendor">Vendor:</label>
-                                            <input class="form-control" id="vendor" type="text" name="name">
+                                            <input class="form-control" id="vendor" type="text" name="vendor">
                                         </div>
                                         <div style="margin:3%" class="col">                                        
                                             <label for="description">Description:</label>
-                                            <input class="form-control" id="description" type="text" name="name">
+                                            <input class="form-control" id="description" type="text" name="description">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div style="margin-top:2%;" class="col">
                                         <label for="amount">Amount:</label>
-                                        <input type="number" id ="amount" placeholder="1.0" step="0.01">
+                                        <input type="number" id ="amount" placeholder="1.0" step="0.01" name="amount">
                                         <button style="margin-left:10%;" class="btn btn-primary">Submit</button>
                                     </div>
                                 </div>
@@ -160,10 +160,10 @@
                         <tbody>
                             {% for payment in all_payments %}
                             <tr>
-                                <td>{{.created_at}}</td>
-                                <td>{{.vendor}}</td>
-                                <td>{{.amount}}</td>
-                                <td>{{.description}}</td>
+                                <td>{{payment.created_at}}</td>
+                                <td>{{payment.vendor}}</td>
+                                <td>{{payment.amount}}</td>
+                                <td>{{payment.description}}</td>
                                 <td><a href="#">View/Edit</a></td>
                             </tr>
                             {% endfor %}
