@@ -21,7 +21,7 @@ def dashboard(request): #in progress
         all_transfers = Transfer.objects.filter(owner=user)
         all_percentages = {}
         for expense in all_expenses:
-            all_percentages[expense.id] = expense.exp_balace/expense.budget
+            all_percentages[expense.id] = expense.exp_balance/expense.budget
         context = {
             "user": user,
             "all_accounts": all_accounts,
@@ -45,7 +45,7 @@ def all_account(request): #complete, not tested
         all_expenses = Expense.objects.filter(owner=user)
         all_percentages = {}
         for expense in all_expenses:
-            all_percentages[expense.id] = expense.exp_balace/expense.budget
+            all_percentages[expense.id] = expense.exp_balance/expense.budget
         context = {
             "user": user,
             "all_accounts": all_accounts,
@@ -69,7 +69,7 @@ def add_account_processing(request): #complete, not tested
         return redirect("/accounts/new")
     form = request.POST
     user = User.objects.get(id = request.session["user_id"])
-    new_account = Account.objects.create(name=form["name"], acc_balance=0, category=form["category"], owner=user)
+    new_account = Account.objects.create(name=form["name"], acc_balance=form["acc_balance"], category=form["category"], owner=user)
     return redirect("/accounts")
 
 def view_account(request, acc_id): ### DO NOT USE ###
@@ -226,8 +226,12 @@ def all_payment(request): #complete, not tested
         user = User.objects.get(id=request.session["user_id"])
         all_payments = Payment.objects.filter(owner=user)
         all_transfers = Transfer.objects.filter(owner=user)
+        all_accounts = Account.objects.filter(owner=user)
+        all_expenses = Expense.objects.filter(owner=user)
         context = {
             "user": user,
+            "all_accounts": all_accounts,
+            "all_expenses": all_expenses,
             "all_payments": all_payments,
             "all_transfers": all_transfers,
         }
