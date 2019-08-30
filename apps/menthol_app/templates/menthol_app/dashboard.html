@@ -11,28 +11,28 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/dashboard">
                 <img src="http://reliefor.com/wp-content/uploads/2015/10/icon-menthol-300px.png" width="30" height="30" class="d-inline-block align-top" alt="">
             Menthol</a>                  
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home</a>
+                    <a class="nav-link" href="/dashboard">Home</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Navigation
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Accounts and Budgets</a>
+                        <a class="dropdown-item" href="/accounts">Accounts and Budgets</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Payments and Transfers</a>
+                        <a class="dropdown-item" href="/payments">Payments and Transfers</a>
                     </div>
                 </li>
                     </ul>
                     <div class="form-inline my-2 my-lg-0">
                         <a class="nav-link disabled" href="#">Logged in as {{user.first_name}} {{user.last_name}}</a>
-                        <a class="nav-link" href="#">Logout</a>
+                        <a class="nav-link" href="/logout">Logout</a>
                     </div>
         </div>
     </nav>
@@ -52,29 +52,16 @@
                 <tbody>
                     {% for account in all_accounts %}
                     <tr>
-                        <td>account.name</td>
-                        <td>account.acc_balance</td>
-                        <td>account.category</td>
+                        <td>{{account.name}}</td>
+                        <td>${{account.acc_balance}}</td>
+                        <td>{{account.category}}</td>
                         <td><a href="#">View/Edit</a></td>
                     </tr>
                     {% endfor %}
-                    <tr>
-                        <td>Bank of America</td>
-                        <td>$100,000</td>
-                        <td>savings</td>
-                        <td><a href="#">View/Edit</a></td>
-                    </tr>
-                    <tr>
-                        <td>Capital One</td>
-                        <td>$3.50</td>
-                        <td>credit</td>
-                        <td><a href="#">View/Edit</a></td>
-                    </tr>
                 </tbody>
                 </table>
                 <div style="margin-left: 5%;">
-                    <a href="#" class="btn btn-primary">View All</a>
-                    <a href="#" class="btn btn-primary">Add Account</a>
+                    <a href="/accounts" class="btn btn-primary">View All/Add Account</a>
                 </div>                    
             </div>
         </div>
@@ -91,29 +78,18 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for payment in all_payments %}
                     <tr>
-                        <td>Amazon</td>
-                        <td>$132.34</td>
-                        <td>Gaming and Entertainment</td>
+                        <td>{{payment.vendor}}</td>
+                        <td>{{payment.amount}}</td>
+                        <td>{{payment.description}}</td>
                         <td><a href="#">View/Edit</a></td>
                     </tr>
-                    <tr>
-                        <td>Taco Bell</td>
-                        <td>$8.50</td>
-                        <td>Fast Food</td>
-                        <td><a href="#">View/Edit</a></td>
-                    </tr>
-                    <tr>
-                        <td>Happy Spa</td>
-                        <td>$100</td>
-                        <td>Massage</td>
-                        <td><a href="#">View/Edit</a></td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
                 </table>
                 <div style="margin-left: 5%;">
-                    <a href="#" class="btn btn-primary">View All</a>
-                    <a href="#" class="btn btn-primary">Add Transaction</a>
+                    <a href="/transactions" class="btn btn-primary">View All/Add Transaction</a>
                 </div>                    
             </div>
         </div>
