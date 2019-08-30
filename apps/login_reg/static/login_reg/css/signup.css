@@ -1,0 +1,55 @@
+/* *{
+    border: 1px solid red;
+} */
+
+#container{
+    width: 740px;
+    margin: 30px auto;
+}
+
+.nav{
+    display: flex;
+    justify-content: space-between;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.nav-item a{
+    font-size: 30px;
+}
+
+form{
+    width: 60%;
+    margin: 30px auto;
+    margin-bottom: 300px;
+}
+
+h1{
+    text-align: center;
+    margin-bottom: 100px;
+}
+
+#logout{
+    width: 100%;
+}
+
+.flash-message{
+    color: red;
+}
+
+.green{
+    color: green;
+}
+
+.gender{
+    margin-left: 20px;
+}
+
+.submitBtn{
+    display: flex;
+    justify-content: center;
+}
+
+.error{
+    color: red;
+}
