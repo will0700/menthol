@@ -65,51 +65,52 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-                <div class="accordion" id="accordionExample275">
-                    <div class="card z-depth-0 bordered">
-                        <div class="card-header" id="headingOne2">
-                        <h5 class="mb-0">
-                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseOne2"
-                            aria-expanded="true" aria-controls="collapseOne2">
-                            Add New Account
-                            </button>
-                        </h5>
+                    
+                        <div class="card z-depth-0 bordered mb-0">
+                            <div class="card-header" id="headingOne2">
+                            <h5 class="mb-0">
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseOne2"
+                                aria-expanded="true" aria-controls="collapseOne2">
+                                Add New Account
+                                </button>
+                            </h5>
+                            </div>
+                            <div id="collapseOne2" class="collapse" aria-labelledby="headingOne2"
+                            data-parent="#accordionExample275">
+                            <div class="card-body">
+                                <form action="/accounts/add/processing" method="POST">
+                                    {% csrf_token %}
+                                    <label>Account Type: </label>
+                                    <select name="category">
+                                        <option>Select Account Type</option>
+                                        <option value="checking">Checking</option>
+                                        <option value="saving">Saving</option>
+                                        <option value="credit_card">Credit Card</option>
+                                    </select>
+                                    <div class="form-group">
+                                        <label>Account Name:</label>
+                                        <input type="text" name="name">
+                                    </div>
+                                    <div class="form-group">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Initial Balance: $</label>
+                                        <input type="number" name="acc_balance">
+                                    </div>
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </form>
+                            </div>
                         </div>
-                        <div id="collapseOne2" class="collapse" aria-labelledby="headingOne2"
-                        data-parent="#accordionExample275">
-                        <div class="card-body">
-                            <form action="/accounts/add/processing" method="POST">
-                                {% csrf_token %}
-                                <label>Account Type: </label>
-                                <select name="category">
-                                    <option>Select Account Type</option>
-                                    <option value="checking">Checking</option>
-                                    <option value="saving">Saving</option>
-                                    <option value="credit_card">Credit Card</option>
-                                </select>
-                                <div class="form-group">
-                                    <label>Account Name:</label>
-                                    <input type="text" name="name">
-                                </div>
-                                <div class="form-group">
-                                </div>
-                                <div class="form-group">
-                                    <label>Initial Balance: $</label>
-                                    <input type="number" name="acc_balance">
-                                </div>
-                                <button type="submit" class="btn btn-success">Submit</button>
-                            </form>
                         </div>
-                    </div>
-                    </div>
+                    
                 </div>
                 <div class="card">
                     <h5 class="card-header">Expenses Overview</h5>
                     {% for expense in all_expenses %}
                     <div class="card-body">
+                            <p>{{ expense.name }} | ${{ expense.exp_balance }}/${{ expense.budget }}</p>
                             <div style="height:30px;" class="progress">
-                                <div style="width:{{ all_percentages.expense.id }}%;"class="progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="{{ expense.percentage }}" aria-valuemin="0" aria-valuemax="100">{{ expense.name }} | ${{ expense.exp_balance }}/${{ expense.budget }}</div>
+                                <div style="width:3%;"class="progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="{{ expense.percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                     </div>
                     {% endfor %}
@@ -123,33 +124,33 @@
                             <div style="width:25%;" class="progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">EXPENSE NAME</div>
                         </div>
                     </div>
-                </div>
-                <div class="accordion" id="accordionExample275">
-                    <div class="card z-depth-0 bordered">
-                        <div class="card-header" id="headingExp">
-                            <h5 class="mb-0">
-                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExp"
-                            aria-expanded="true" aria-controls="collapseExp">
-                            Add New Expense
-                            </button>
-                            </h5>
-                        </div>
-                        <div id="collapseExp" class="collapse" aria-labelledby="headingExp"
-                        data-parent="#accordionExample275">
-                        <div class="card-body">
-                            <form action="/expenses/add/processing" method="POST">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <label>Expense Name:</label>
-                                    <input type="text" name="name">
-                                </div>
-                                <div class="form-group">
-                                    <label>Budgeted Amount: $</label>
-                                    <input type="number" name="budget">
-                                </div>
-                                <button type="submit" class="btn btn-success">Submit</button>
-                            </form>
-                        </div>
+                    <div class="accordion" id="accordionExample275">
+                        <div class="card z-depth-0 bordered mb-0">
+                            <div class="card-header" id="headingExp">
+                                <h5 class="mb-0">
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExp"
+                                aria-expanded="true" aria-controls="collapseExp">
+                                Add New Expense
+                                </button>
+                                </h5>
+                            </div>
+                            <div id="collapseExp" class="collapse" aria-labelledby="headingExp"
+                            data-parent="#accordionExample275">
+                            <div class="card-body">
+                                <form action="/expenses/add/processing" method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label>Expense Name:</label>
+                                        <input type="text" name="name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Budgeted Amount: $</label>
+                                        <input type="number" name="budget">
+                                    </div>
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </form>
+                            </div>
+                            </div>
                         </div>
                     </div>
                 </div>
