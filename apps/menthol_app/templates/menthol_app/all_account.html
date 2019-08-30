@@ -52,12 +52,14 @@
                             </thead>
                             <tbody>
                                 {% for account in all_accounts %}
-                                <tr>{{ account.name }}</tr>
-                                <tr>{{ account.category }}</tr>
-                                <tr>{{ account.acc_balance }}</tr>
                                 <tr>
-                                    <a href="/accounts/view/{{account.id}}"> View </a>
-                                    | <a href="/accounts/edit/{{account.id}}"> Edit </a>
+                                    <td>{{ account.name }}</td>
+                                    <td>{{ account.category }}</td>
+                                    <td>${{ account.acc_balance }}</td>
+                                    <td>
+                                        <a href="/accounts/view/{{account.id}}"> View </a>
+                                        | <a href="/accounts/edit/{{account.id}}"> Edit </a>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -135,7 +137,7 @@
                         <div id="collapseExp" class="collapse" aria-labelledby="headingExp"
                         data-parent="#accordionExample275">
                         <div class="card-body">
-                            <form action="/accounts/add/processing" method="POST">
+                            <form action="/expenses/add/processing" method="POST">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label>Expense Name:</label>
