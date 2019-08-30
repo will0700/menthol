@@ -34,28 +34,31 @@
     </head>
     <body>
         <div id="container">
-            <h1>Welcome!</h1>
-            <ul class="nav">
+            <h1 style="font-size:60px; color:white;">Welcome to Menthol</h1>
+            <div style="display:flex; justify-content: center;">
+            <img src="http://reliefor.com/wp-content/uploads/2015/10/icon-menthol-300px.png" width="100" height="100" class="d-inline-block align-middle" alt="menthol logo">
+            </div>
+            <ul style="width:600px;" class="nav">
                 <li class="nav-item">
                     <a class="nav-link 
                     {% if request.session.signupin == 1 %}
-                    text-primary
+                    text-light
                     {% else %}
-                    text-secondary
+                    text-default
                     {% endif %}
                     " id="signup">Sign Up</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link 
                     {% if request.session.signupin == 1 %}
-                    text-secondary
+                    text-default
                     {% else %}
-                    text-primary
+                    text-light
                     {% endif %}
                     " id="signin">Sign In</a>
                 </li>
             </ul>
-            <form id="register" action="/register" method="POST">
+            <form style="width: 600px;"id="register" action="/register" method="POST">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="first_name">First Name:</label>
@@ -130,11 +133,11 @@
                 </div> -->
 
                 
-                <button type="submit" class="btn btn-primary" id="registerSubmit">Register</button>
+                <button type="submit" class="btn btn-success" id="registerSubmit">Register</button>
                 
             </form>
 
-            <form id="login" action="/login" method="POST">
+            <form style="width:600px;" id="login" action="/login" method="POST">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="email">Email:</label>
@@ -159,7 +162,7 @@
                     {% endif %}
                 </div>
                 
-                <button type="submit" class="btn btn-primary" id="login Submit">Login</button>
+                <button type="submit" class="btn btn-success" id="login Submit">Login</button>
                 
                 
             </form>

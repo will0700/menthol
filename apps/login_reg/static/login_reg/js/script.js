@@ -2,10 +2,10 @@ $(document).ready(function(){
     console.log("jQuery is ready");
     $("#signup").click(function(){
         console.log("I am running");
-        $(this).removeClass("text-secondary");
-        $(this).addClass("text-primary");
-        $("#signin").removeClass("text-primary")
-        $("#signin").addClass("text-secondary");
+        $(this).removeClass("text-default");
+        $(this).addClass("text-light");
+        $("#signin").removeClass("text-light")
+        $("#signin").addClass("text-default");
 
         // $("#register").css("display", "block");
         // $("#login").css("display", "none");
@@ -15,10 +15,10 @@ $(document).ready(function(){
     });
     $("#signin").click(function(){
         console.log("I am running");
-        $(this).removeClass("text-secondary");
-        $(this).addClass("text-primary");
-        $("#signup").removeClass("text-primary");
-        $("#signup").addClass("text-secondary");
+        $(this).removeClass("text-default");
+        $(this).addClass("text-light");
+        $("#signup").removeClass("text-light");
+        $("#signup").addClass("text-default");
 
         // $("#register").css("display", "none");
         // $("#login").css("display", "block");
