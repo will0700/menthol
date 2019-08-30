@@ -7,3 +7,12 @@
 .card{
     margin-bottom: 5%;
 }
+
+.test{
+    width:45%
+}
+
+#transfers_content{
+    display:flex;
+    justify-content: space-evenly;
+}

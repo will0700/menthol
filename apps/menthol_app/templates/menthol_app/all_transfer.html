@@ -4,54 +4,181 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Menthol - all transactions</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'menthol_app/dashboard.css' %}">
+    <title>Menthol - All Transactions</title>
 </head>
 <body>
-    <h2>Add payment</h2>
-    <form action="/payments/processing" method="POST">
-        {% csrf_token %}
-        <label for="">Vendor:</label>
-        <input type="text" name="vendor">
-        <label for="">Description:</label>
-        <input type="text" name="description">
-        <label for="">Amount:</label>
-        $<input type="number" step="0.01" name="amount">
-        <label for="">Select Expense:</label>
-        <select type="text" name="expense">
-            {% for expense in all_expenses %}
-            <option value="{{expense.name}}">{{expense.name}}</option>
-            {% endfor %}
-        </select>
-        <label for="">Select Account:</label>
-        <select type="text" name="account">
-            {% for account in all_accounts %}
-            <option value="{{account.name}}">{{account.name}}</option>
-            {% endfor %}
-        </select>
-    </form>
-    <h3></h3>
-    <h3></h3>
-    <h2>Add transfer</h2>
-    <form action="/transfers/processing" method="POST">
-        {% csrf_token %}
-        <label for="">Vendor</label>
-        <input type="text" name="vendor">
-        <label for="">Description</label>
-        <input type="text" name="description">
-        $<label for="">Amount</label>
-        <input type="number" step="0.01">
-        <label for="">Account From:</label>
-        <select name="credit_acc" id="">
-            {% for account in all_accounts %}
-            <option value="{{account.name}}">{{account.name}}</option>
-            {% endfor %}
-        </select>
-        <label for="">Account To:</label>
-        <select name="debit_acc" id="">
-            {% for account in all_accounts %}
-            <option value="{{account.name}}">{{account.name}}</option>
-            {% endfor %}
-        </select>
-    </form>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="/dashboard">
+                    <img src="http://reliefor.com/wp-content/uploads/2015/10/icon-menthol-300px.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                Menthol</a>                  
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/dashboard">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Navigation
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/accounts">Accounts and Budgets</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/payments">Payments and s</a>
+                        </div>
+                    </li>
+                        </ul>
+                        <div class="form-inline my-2 my-lg-0">
+                            <a class="nav-link disabled" href="#">Logged in as {{user.first_name}} {{user.last_name}}</a>
+                            <a class="nav-link" href="/logout">Logout</a>
+                        </div>
+            </div>
+        </nav>
+    <div id="container">
+        
+        <div id="transfers_content">
+            <div class="card test">
+                <div class="card-body">
+                    <h5 style="margin-bottom:5%">Add Transfer</h5>
+                        <form>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="From">From:</label>
+                                    <select id="From" name="category">
+                                        <option>Select Account</option>
+                                        <option value="checking">Checking</option>
+                                        <option value="saving">Saving</option>
+                                        <option value="credit_card">Credit Card</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="From">To:</label>
+                                    <select name="category">                                        
+                                        <option>Select Account</option>
+                                        <option value="checking">Checking</option>
+                                        <option value="saving">Saving</option>
+                                        <option value="credit_card">Credit Card</option>
+                                    </select>
+                                </div>
+                                <div class="row">
+                                    <div style="margin:7%" class="col">                                        
+                                        <label for="description">Description:</label>
+                                        <input class="form-control" id="description" type="text" name="name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div style="margin-top:5%" class="col">
+                                    <label for="amount">Amount:</label>
+                                    <input type="number" id ="amount" placeholder="1.0" step="0.01">
+                                    <button style="margin-left:10%;" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                            
+                        </form>
+                    <h5 class="card-title">All Transfers</h5>
+                    <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Category</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transfer in all_transfers %}
+                        <tr>
+                            <td>{{transfer.created_at}}</td>
+                            <td>{{transfer.vendor}}</td>
+                            <td>{{transfer.amount}}</td>
+                            <td>{{transfer.description}}</td>
+                            <td><a href="#">View/Edit</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    </table>                    
+                </div>
+            </div>
+            <div class="card test">
+                    <div class="card-body">
+                        <h5>Add Payment</h5>
+                            <form>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="From">Payment Account:</label>
+                                        <select id="From" name="category">
+                                            <option>Select Account</option>
+                                            <option value="checking">Checking</option>
+                                            <option value="saving">Saving</option>
+                                            <option value="credit_card">Credit Card</option>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <label for="From">Budget Category:</label>
+                                        <select name="category">                                        
+                                            <option>Select Account</option>
+                                            <option value="checking">Checking</option>
+                                            <option value="saving">Saving</option>
+                                            <option value="credit_card">Credit Card</option>
+                                        </select>
+                                    </div>
+                                    <div class="row">
+                                        <div style="margin:3%" class="col">                                        
+                                            <label for="vendor">Vendor:</label>
+                                            <input class="form-control" id="vendor" type="text" name="name">
+                                        </div>
+                                        <div style="margin:3%" class="col">                                        
+                                            <label for="description">Description:</label>
+                                            <input class="form-control" id="description" type="text" name="name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div style="margin-top:2%;" class="col">
+                                        <label for="amount">Amount:</label>
+                                        <input type="number" id ="amount" placeholder="1.0" step="0.01">
+                                        <button style="margin-left:10%;" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </div>
+                                
+                            </form>
+                        <h5 style = "margin-top:2%" class="card-title">All Payments</h5>
+                        <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Category</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in all_payments %}
+                            <tr>
+                                <td>{{.created_at}}</td>
+                                <td>{{.vendor}}</td>
+                                <td>{{.amount}}</td>
+                                <td>{{.description}}</td>
+                                <td><a href="#">View/Edit</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>                    
+                    </div>
+                </div>
+        </div>
+    </div>
+    
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -71,6 +71,7 @@
                 <table class="table">
                 <thead class="thead-dark">
                     <tr>
+                        <th scope="col">Date</th>
                         <th scope="col">Name</th>
                         <th scope="col">Amount</th>
                         <th scope="col">Category</th>
@@ -80,6 +81,7 @@
                 <tbody>
                     {% for payment in all_payments %}
                     <tr>
+                        <td>{{payment.created_at}}</td>
                         <td>{{payment.vendor}}</td>
                         <td>{{payment.amount}}</td>
                         <td>{{payment.description}}</td>
