@@ -215,7 +215,7 @@ def all_payment(request): #complete, not tested
             "user": user,
             "all_payments": all_payments,
         }
-        return render(request, "menthol_app/all_payment.html", context)
+        return render(request, "menthol_app/all_transactions.html", context)
 
 
 def new_payment(request): #complete***, not tested
