@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from apps.login_reg.models import *
 from .models import *
-
+from decimal import Decimal
 
 
 #################
@@ -250,22 +250,22 @@ def new_payment(request): #complete, not tested
 
 def new_payment_processing(request): #complete, not tested
     if request.method != "POST":
-        return redirect("payments/new")
+        return redirect("/payments")
     else:
         ### retrieve objects ###
-        expense = Expense.objects.get(name=request.POST["expense"]) # \ @Justin please match these <form><input name=""> in the html -Will
-        account = Account.objects.get(name=request.POST["account"]) # / 
+        expense = Expense.objects.get(name=request.POST["expense"])
+        account = Account.objects.get(name=request.POST["account"])
         user = User.objects.get(id=request.session["user_id"])
         ### create new payment object ###
         new_payment = Payment.objects.create(vendor=request.POST["vendor"], description=request.POST["description"], amount=request.POST["amount"], debit_exp=expense, credit_acc=account, owner=user)
         ### apply debit to expense ###
-        expense.exp_balance = (expense.exp_balance + request.POST["amount"]) #expense account is only ever debited -Will
-        expense.objects.save()
+        expense.exp_balance = (expense.exp_balance + Decimal(request.POST["amount"])) #expense account is only ever debited -Will
+        expense.save()
         ### apply credit to account ###
         if account.category == "checking" or account.category == "saving":
-            account.acc_balance = (account.acc_balance - request.POST["amount"]) #crediting a bank account decrease balance -Will
+            account.acc_balance = (account.acc_balance - Decimal(request.POST["amount"])) #crediting a bank account decrease balance -Will
         elif account.category == "credit_card":
-            account.acc_balance = (account.acc_balance + request.POST["amount"]) #crediting a credit card increase balance -Will
+            account.acc_balance = (account.acc_balance + Decimal(request.POST["amount"])) #crediting a credit card increase balance -Will
         # elif account.category = "venmo":
         #     if account.acc_balance > request.POST["amount"]:
         #         account.acc_balance = account.acc_balance - request.POST["amount"]
@@ -275,7 +275,7 @@ def new_payment_processing(request): #complete, not tested
                 ## then we would need to foreign key that new object into User and Payment and Transfer... highly inefficient.
                 ## tentatively suggesting we leave venmo tracking as a postgrad idea.
                 ## -Will
-        account.objects.save()
+        account.save()
         return redirect("/payments")
 
 def view_payment(request, pmt_id): #to do
@@ -316,21 +316,21 @@ def new_transfer(request): #complete, not tested
 
 def new_transfer_processing(request): #complete, not tested
     if request.method != "POST":
-        return redirect("/transfers/new")
+        return redirect("/payments")
     else:
         ### retrieve objects ###
-        acc_to_debit = Account.objects.get(name=request.POST["debit_acc"])   # \ @Justin please match these <form><input name=""> in the html -Will
-        acc_to_credit = Account.objects.get(name=request.POST["credit_acc"]) # / Lowkey really tricky though, lets please discuss
-        owner = User.objects.get(id=request.session["user_id"])
+        acc_to_debit = Account.objects.get(name=request.POST["debit_acc"])
+        acc_to_credit = Account.objects.get(name=request.POST["credit_acc"])
+        user = User.objects.get(id=request.session["user_id"])
         ### create new transfer object ###
-        new_transfer = Transfer.objects.create(vendor=request.POST["vendor"], description=request.POST["description"], amount=request.POST["amount"], debit_acc=acc_to_debit, credit_acc=acc_to_credit)
+        new_transfer = Transfer.objects.create(vendor=acc_to_debit.name, description=request.POST["description"], amount=request.POST["amount"], debit_acc=acc_to_debit, credit_acc=acc_to_credit, owner=user)
         ### apply debit to debit acc ###
-        acc_to_debit.acc_balance = (acc_to_debit.acc_balance + request.POST["amount"])
-        acc_to_debit.objects.save()
+        acc_to_debit.acc_balance = (acc_to_debit.acc_balance + Decimal(request.POST["amount"]))
+        acc_to_debit.save()
         ### apply credit to credit acc ###
-        acc_to_credit.acc_balance = (acc_to_credit.acc_balance - request.POST["amount"])
-        acc_to_credit.objects.save()
-        return redirect("/transfers")
+        acc_to_credit.acc_balance = (acc_to_credit.acc_balance - Decimal(request.POST["amount"]))
+        acc_to_credit.save()
+        return redirect("/payments")
 
 def view_transfer(request, xfer_id): #to do
     pass

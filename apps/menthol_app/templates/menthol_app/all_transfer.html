@@ -43,6 +43,7 @@
                 <div class="card-body">
                     <h5 style="margin-bottom:5%">Add Transfer</h5>
                         <form method="post" action="/transfers/processing">
+                            {% csrf_token %}
                             <div class="row">
                                 <div class="col">
                                     <label for="From">From:</label>
@@ -107,6 +108,7 @@
                     <div class="card-body">
                         <h5>Add Payment</h5>
                             <form method="post" action="/payments/processing">
+                                {% csrf_token %}
                                 <div class="row">
                                     <div class="col">
                                         <label for="From">Payment Account:</label>
