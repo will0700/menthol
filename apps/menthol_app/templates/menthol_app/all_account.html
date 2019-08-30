@@ -51,7 +51,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for account in accounts%}
+                                {% for account in all_accounts %}
                                 <tr>{{ account.name }}</tr>
                                 <tr>{{ account.category }}</tr>
                                 <tr>{{ account.acc_balance }}</tr>
@@ -96,6 +96,7 @@
                                     <label>Initial Balance: $</label>
                                     <input type="number" name="acc_balance">
                                 </div>
+                                <button type="submit" class="btn btn-success">Submit</button>
                             </form>
                         </div>
                     </div>
@@ -103,11 +104,13 @@
                 </div>
                 <div class="card">
                     <h5 class="card-header">Expenses Overview</h5>
+                    {% for expense in all_expenses %}
                     <div class="card-body">
                             <div style="height:30px;" class="progress">
-                                <div style="width:45%;"class="progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">EXPENSE NAME</div>
+                                <div style="width:{{ all_percentages.expense.id }}%;"class="progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="{{ expense.percentage }}" aria-valuemin="0" aria-valuemax="100">{{ expense.name }} | ${{ expense.exp_balance }}/${{ expense.budget }}</div>
                             </div>
                     </div>
+                    {% endfor %}
                     <div class="card-body">
                         <div style="height:30px;" class="progress">
                             <div style="width:75%;" class="progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">EXPENSE NAME</div>
@@ -142,6 +145,7 @@
                                     <label>Budgeted Amount: $</label>
                                     <input type="number" name="budget">
                                 </div>
+                                <button type="submit" class="btn btn-success">Submit</button>
                             </form>
                         </div>
                         </div>
