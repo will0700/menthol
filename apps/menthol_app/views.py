@@ -48,7 +48,7 @@ def add_account(request): #complete, not tested
         context = {
             "user": user,
         }
-        return render(request, "/menthol_app/dashboard.html", context)
+        return render(request, "/menthol_app/all_account.html", context)
 
 def add_account_processing(request): #complete, not tested
     if request.method != "POST":
@@ -58,7 +58,7 @@ def add_account_processing(request): #complete, not tested
     new_account = Account.objects.create(name=form["name"], acc_balance=0, category=form["category"], owner=user)
     return redirect("/accounts")
 
-def view_account(request, acc_id): #complete, not tested
+def view_account(request, acc_id): ### DO NOT USE ###
     if "user_id" not in request.session:
         return redirect("/")
     else:
@@ -73,7 +73,7 @@ def view_account(request, acc_id): #complete, not tested
             }
             return render(request, "menthol_app/view_account.html", context)
 
-def edit_account(request, acc_id): #complete, not tested
+def edit_account(request, acc_id): ### DO NOT USE ###
     if "user_id" not in request.session:
         return redirect ('/')
     else:
@@ -88,7 +88,7 @@ def edit_account(request, acc_id): #complete, not tested
             }
             return render(request, "menthol_app/edit_account.html", context)
 
-def edit_account_processing(request, acc_id): #complete, not tested
+def edit_account_processing(request, acc_id): ### DO NOT USE ###
     if request.method != "POST":
         return redirect ("/edit_account")
     else:
@@ -131,7 +131,7 @@ def all_expense(request): #complete, not tested
             "user": user,
             "all_expenses": all_expenses,
         }
-        return render(request, "menthol_app/all_expense.html", context)
+        return render(request, "menthol_app/all_account.html", context)
 
 def add_expense(request): #complete, not tested
     if "user_id" not in request.session:
@@ -141,7 +141,7 @@ def add_expense(request): #complete, not tested
         context = {
             "user": user,
         }
-        return render(request, "/menthol_app/dashboard.html", context)
+        return render(request, "/menthol_app/all_account.html", context)
 
 def add_expense_processing(request): #complete, not tested
     if request.method != "POST":
@@ -149,16 +149,16 @@ def add_expense_processing(request): #complete, not tested
     form = request.POST
     user = User.objects.get(id = request.session["user_id"])
     new_expense = Expense.objects.create(name=form["name"], exp_balance=0, budget=form["budget"], owner=user)
-    return redirect("/expenses")
+    return redirect("/accounts")
 
-def view_expense(request, exp_id): #complete, not tested
+def view_expense(request, exp_id): ### DO NOT USE ###
     if "user_id" not in request.session:
         return redirect("/")
     else:
         user = User.objects.get(id=request.session["user_id"])
         expense = Expense.objects.get(id=acc_id)
         if expense.owner != user:
-            return redirect("/expenses")
+            return redirect("/accounts")
         else:
             context = {
                 "user": user,
@@ -166,7 +166,7 @@ def view_expense(request, exp_id): #complete, not tested
             }
             return render(request, "menthol_app/view_expense.html", context)
 
-def edit_expense(request, exp_id): #complete, not tested
+def edit_expense(request, exp_id): ### DO NOT USE ###
     if "user_id" not in request.session:
         return redirect ('/')
     else:
@@ -181,7 +181,7 @@ def edit_expense(request, exp_id): #complete, not tested
             }
             return render(request, "menthol_app/edit_expense.html", context)
 
-def edit_expense_processing(request, acc_id): #complete, not tested
+def edit_expense_processing(request, acc_id): ### DO NOT USE ###
     if request.method != "POST":
         return redirect ("/edit_expense")
     else:
@@ -215,10 +215,10 @@ def all_payment(request): #complete, not tested
             "user": user,
             "all_payments": all_payments,
         }
-        return render(request, "menthol_app/all_transactions.html", context)
+        return render(request, "menthol_app/all_transfer.html", context)
 
 
-def new_payment(request): #complete***, not tested
+def new_payment(request): #complete, not tested
     if "user_id" not in request.session:
         return redirect("/")
     else:
@@ -226,7 +226,7 @@ def new_payment(request): #complete***, not tested
         context = {
             "user": user,
         }
-        return render(request, "menthol_app/new_payment.html", context) #***dashboard or new template?
+        return render(request, "menthol_app/all_transfer.html", context)
 
 def new_payment_processing(request): #complete, not tested
     if request.method != "POST":
@@ -256,7 +256,7 @@ def new_payment_processing(request): #complete, not tested
                 ## tentatively suggesting we leave venmo tracking as a postgrad idea.
                 ## -Will
         account.objects.save()
-        return redirect("/payments") # "/payments" or "/payments/new"? chances are bookkeeping is weekly at best and has like 15 entries to make... UX decision. -Will
+        return redirect("/payments")
 
 def view_payment(request, pmt_id): #to do
     pass
@@ -284,7 +284,7 @@ def all_transfer(request): #complete, not tested
         }
         return render(request, "menthol_app/all_transfer.html", context)
 
-def new_transfer(request): #complete***, not tested
+def new_transfer(request): #complete, not tested
     if "user_id" not in request.session:
         return redirect("/")
     else:
@@ -292,7 +292,7 @@ def new_transfer(request): #complete***, not tested
         context = {
             "user": user,
         }
-        return render(request, "menthol_app/new_transfer.html", context) #***dashboard or new template?
+        return render(request, "menthol_app/all_transfer.html", context)
 
 def new_transfer_processing(request): #complete, not tested
     if request.method != "POST":
@@ -311,7 +311,6 @@ def new_transfer_processing(request): #complete, not tested
         acc_to_credit.acc_balance = (acc_to_credit.acc_balance - request.POST["amount"])
         acc_to_credit.objects.save()
         return redirect("/transfers")
-        # "/transfers" or "/transfers/new"? chances are bookkeeping is weekly at best and has like 15 entries to make... UX decision. -Will
 
 def view_transfer(request, xfer_id): #to do
     pass
