@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Menthol - all transactions</title>
+</head>
+<body>
+    <h2>Add payment</h2>
+    <form action="/payments/processing" method="POST">
+        {% csrf_token %}
+        <label for="">Vendor:</label>
+        <input type="text" name="vendor">
+        <label for="">Description:</label>
+        <input type="text" name="description">
+        <label for="">Amount:</label>
+        $<input type="number" step="0.01" name="amount">
+        <label for="">Select Expense:</label>
+        <select type="text" name="expense">
+            {% for expense in all_expenses %}
+            <option value="{{expense.name}}">{{expense.name}}</option>
+            {% endfor %}
+        </select>
+        <label for="">Select Account:</label>
+        <select type="text" name="account">
+            {% for account in all_accounts %}
+            <option value="{{account.name}}">{{account.name}}</option>
+            {% endfor %}
+        </select>
+    </form>
+    <h3></h3>
+    <h3></h3>
+    <h2>Add transfer</h2>
+    <form action="/transfers/processing" method="POST">
+        {% csrf_token %}
+        <label for="">Vendor</label>
+        <input type="text" name="vendor">
+        <label for="">Description</label>
+        <input type="text" name="description">
+        $<label for="">Amount</label>
+        <input type="number" step="0.01">
+        <label for="">Account From:</label>
+        <select name="credit_acc" id="">
+            {% for account in all_accounts %}
+            <option value="{{account.name}}">{{account.name}}</option>
+            {% endfor %}
+        </select>
+        <label for="">Account To:</label>
+        <select name="debit_acc" id="">
+            {% for account in all_accounts %}
+            <option value="{{account.name}}">{{account.name}}</option>
+            {% endfor %}
+        </select>
+    </form>
+</body>
+</html>
