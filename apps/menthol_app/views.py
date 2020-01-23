@@ -253,9 +253,9 @@ def new_payment_processing(request): #complete, not tested
         return redirect("/payments")
     else:
         ### retrieve objects ###
-        expense = Expense.objects.get(name=request.POST["expense"])
-        account = Account.objects.get(name=request.POST["account"])
         user = User.objects.get(id=request.session["user_id"])
+        expense = Expense.objects.get(owner=user, name=request.POST["expense"])
+        account = Account.objects.get(owner=user, name=request.POST["account"])
         ### create new payment object ###
         new_payment = Payment.objects.create(vendor=request.POST["vendor"], description=request.POST["description"], amount=request.POST["amount"], debit_exp=expense, credit_acc=account, owner=user)
         ### apply debit to expense ###
@@ -319,9 +319,9 @@ def new_transfer_processing(request): #complete, not tested
         return redirect("/payments")
     else:
         ### retrieve objects ###
-        acc_to_debit = Account.objects.get(name=request.POST["debit_acc"])
-        acc_to_credit = Account.objects.get(name=request.POST["credit_acc"])
         user = User.objects.get(id=request.session["user_id"])
+         = Account.objects.get(owner=user, name=request.POST["debit_acc"])
+        acc_to_credit = Account.objects.get(owner=user, name=request.POST["credit_acc"])
         ### create new transfer object ###
         new_transfer = Transfer.objects.create(vendor=acc_to_debit.name, description=request.POST["description"], amount=request.POST["amount"], debit_acc=acc_to_debit, credit_acc=acc_to_credit, owner=user)
         ### apply debit to debit acc ###
