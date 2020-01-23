@@ -320,7 +320,7 @@ def new_transfer_processing(request): #complete, not tested
     else:
         ### retrieve objects ###
         user = User.objects.get(id=request.session["user_id"])
-         = Account.objects.get(owner=user, name=request.POST["debit_acc"])
+        acc_to_debit = Account.objects.get(owner=user, name=request.POST["debit_acc"])
         acc_to_credit = Account.objects.get(owner=user, name=request.POST["credit_acc"])
         ### create new transfer object ###
         new_transfer = Transfer.objects.create(vendor=acc_to_debit.name, description=request.POST["description"], amount=request.POST["amount"], debit_acc=acc_to_debit, credit_acc=acc_to_credit, owner=user)
